@@ -8,7 +8,6 @@ using Domain.Common;
 using MappingValidation.Extensions;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
-using Polly;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,18 +33,7 @@ builder.Host.UseServiceProviderFactory(serviceProvider)
 
     services.AddHttpContextAccessor();
     services.Configure<Providers>(builder.Configuration.GetSection("Providers"));
-
-    // https://www.youtube.com/watch?v=RRnGn8DDO18
-    services.AddHttpClient<IPClientService>()
-    // ADDED RESILIENCE
-        .AddPolicyHandler(
-            Policy.Handle<HttpRequestException>()
-            .WaitAndRetryAsync(3, retryAttemp => TimeSpan.FromSeconds(Math.Pow(2, retryAttemp)))
-            .AsAsyncPolicy<HttpResponseMessage>())
-        .AddPolicyHandler(
-            Policy.Handle<HttpRequestException>()
-            .CircuitBreakerAsync(2, TimeSpan.FromSeconds(30))
-            .AsAsyncPolicy<HttpResponseMessage>());
+    services.AddProviders();
 
     services.Configure<TenantSettings>(builder.Configuration.GetSection("Tenant"));
     services.AddScoped<TenantService>();
