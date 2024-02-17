@@ -1,4 +1,5 @@
 using Autofac;
+using Autofac.Builder;
 using Autofac.Extensions.DependencyInjection;
 using Core.Common.Behaviors;
 using Core.Common.Extensions;
@@ -8,6 +9,8 @@ using Domain.Common;
 using MappingValidation.Extensions;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.Localization;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +34,7 @@ builder.Host.UseServiceProviderFactory(serviceProvider)
         options.KnownProxies.Clear();
     });
 
+    services.AddLocalization();
     services.AddHttpContextAccessor();
     services.Configure<Providers>(builder.Configuration.GetSection("Providers"));
     services.AddProviders();
@@ -74,6 +78,17 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+var supportedCultures = new[] { new CultureInfo("pt-BR"), new CultureInfo("en-US"), new CultureInfo("fr-FR") };
+
+var locationOptions = new RequestLocalizationOptions 
+{
+    DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(supportedCultures[0]),
+    SupportedCultures = supportedCultures.ToList(),
+    SupportedUICultures = supportedCultures.ToList(),
+};
+
+app.UseRequestLocalization(locationOptions);
 
 app.UseAuthorization();
 

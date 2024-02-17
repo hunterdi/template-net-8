@@ -2,7 +2,9 @@
 using MappingValidation.Models.Common.Behaviors;
 using MappingValidation.Models.Queries;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
+using RPGApi.Resources;
 using Service.Common.Behaviors;
 using Service.Services;
 
@@ -89,6 +91,12 @@ namespace RPGApi.Controllers
             var result = await this._service.DownloadAsync(id);
 
             return File(result.Content, result.ContentType, result.RealName);
+        }
+
+        [HttpGet("message/{text}")]
+        public IActionResult Localizer([FromServices] IStringLocalizer<Global> localizer, [FromRoute] string text)
+        {
+            return Ok(localizer[text].Value);
         }
     }
 }
