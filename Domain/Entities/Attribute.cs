@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using Domain.Enums;
 
 namespace Domain.Entities
 {
@@ -8,6 +9,7 @@ namespace Domain.Entities
         public int VariableValue { get; set; }
         public IReadOnlyList<Metric>? ModifiedMetrics { get; set; }
         public int? ModifiedValue { get; set; }
+        public required TypeAttribute Type { get; set; }
     }
 }
 
