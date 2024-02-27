@@ -13,8 +13,8 @@ namespace MappingValidation.EntityConfigurations
         public override void Configure(EntityTypeBuilder<Domain.Entities.Talent> builder)
         {
             builder.Property(e => e.Name).IsRequired();
-            builder.Property(e => e.Requirement).IsRequired();
-            builder.Property(e => e.Metrics).IsRequired();
+            //builder.Property(e => e.Requirement).IsRequired();
+            //builder.Property(e => e.Metrics).IsRequired();
 
             builder.HasMany(e => e.Metrics);
             builder.HasOne(e => e.Requirement);

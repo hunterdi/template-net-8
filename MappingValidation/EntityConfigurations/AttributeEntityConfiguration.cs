@@ -16,10 +16,10 @@ namespace MappingValidation.EntityConfigurations
             builder.Property(e => e.Type).IsRequired();
             builder.Property(e => e.VariableValue).IsRequired(false);
             builder.Property(e => e.ModifiedValue).IsRequired(false);
-            builder.Property(e => e.ModifiedMetrics).IsRequired(false);
+            //builder.Property(e => e.ModifiedMetrics).IsRequired(false);
 
             builder.HasMany(e => e.ModifiedMetrics);
-            
+
             base.Configure(builder);
         }
     }

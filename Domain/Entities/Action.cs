@@ -6,7 +6,7 @@ namespace Domain.Entities
     {
         public required string Name { get; set; }
         public required virtual Requirement Requirement { get; set; }
-        public required virtual IReadOnlyList<Metric> Metrics { get; set; }
+        public virtual IReadOnlyList<Metric>? Metrics { get; set; }
     }
 }
 

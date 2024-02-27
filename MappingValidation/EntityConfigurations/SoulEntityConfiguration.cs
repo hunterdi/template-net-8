@@ -12,7 +12,7 @@ namespace MappingValidation.EntityConfigurations
     {
         public override void Configure(EntityTypeBuilder<Domain.Entities.Soul> builder)
         {
-            builder.Property(e => e.Attributes).IsRequired();
+            //builder.Property(e => e.Attributes).IsRequired();
             
             builder.HasMany(e => e.Attributes);
             

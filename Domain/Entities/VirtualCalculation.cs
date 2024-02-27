@@ -4,6 +4,6 @@ namespace Domain.Entities
 {
     public class VirtualCalculation: BaseEntity<Guid>
     {
-        public required IReadOnlyCollection<Metric> Metrics { get; set; }
+        public virtual required IReadOnlyCollection<Metric> Metrics { get; set; }
     }
 }

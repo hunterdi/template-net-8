@@ -15,17 +15,17 @@ namespace MappingValidation.EntityConfigurations
         {
             builder.Property(e => e.Name).IsRequired();
             builder.Property(e => e.Age).IsRequired();
-            builder.Property(e => e.Race).IsRequired();
+            //builder.Property(e => e.Race).IsRequired();
             builder.Property(e => e.LifePoints).IsRequired();
             builder.Property(e => e.SoulsPoints).IsRequired();
             builder.Property(e => e.StaminaPoints).IsRequired();
-            builder.Property(e => e.Personalities).IsRequired();
-            builder.Property(e => e.Restrictions).IsRequired();
-            builder.Property(e => e.Attributes).IsRequired();
-            builder.Property(e => e.Skills).IsRequired(false);
-            builder.Property(e => e.Souls).IsRequired();
-            builder.Property(e => e.Talents).IsRequired(false);
-            builder.Property(e => e.Actions).IsRequired(false);
+            //builder.Property(e => e.Personalities).IsRequired();
+            //builder.Property(e => e.Restrictions).IsRequired();
+            //builder.Property(e => e.Attributes).IsRequired();
+            //builder.Property(e => e.Skills).IsRequired(false);
+            //builder.Property(e => e.Souls).IsRequired();
+            //builder.Property(e => e.Talents).IsRequired(false);
+            //builder.Property(e => e.Actions).IsRequired(false);
 
             builder.HasOne(e => e.Race);
             builder.HasMany(e => e.Personalities);

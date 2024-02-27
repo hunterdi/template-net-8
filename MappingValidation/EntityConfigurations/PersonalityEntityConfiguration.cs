@@ -14,7 +14,7 @@ namespace MappingValidation.EntityConfigurations
         {
             builder.Property(e => e.Name).IsRequired();
             builder.Property(e => e.Value).IsRequired();
-            builder.Property(e => e.Attributes).IsRequired();
+            //builder.Property(e => e.Attributes).IsRequired();
 
             builder.HasMany(e => e.Attributes);
 
