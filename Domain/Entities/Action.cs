@@ -5,8 +5,8 @@ namespace Domain.Entities
     public class Action: BaseEntity<Guid>
     {
         public required string Name { get; set; }
-        public required Requirement Requirement { get; set; }
-        public required IReadOnlyList<Metric> Metrics { get; set; }
+        public required virtual Requirement Requirement { get; set; }
+        public required virtual IReadOnlyList<Metric> Metrics { get; set; }
     }
 }
 

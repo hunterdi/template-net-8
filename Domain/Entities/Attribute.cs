@@ -6,8 +6,8 @@ namespace Domain.Entities
     public class Attribute: BaseEntity<Guid>
     {
         public int BaseValue { get; set; }
-        public int VariableValue { get; set; }
-        public IReadOnlyList<Metric>? ModifiedMetrics { get; set; }
+        public int? VariableValue { get; set; }
+        public virtual IReadOnlyList<Metric>? ModifiedMetrics { get; set; }
         public int? ModifiedValue { get; set; }
         public required TypeAttribute Type { get; set; }
     }

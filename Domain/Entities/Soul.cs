@@ -4,7 +4,7 @@ namespace Domain.Entities
 {
     public class Soul: BaseEntity<Guid>
     {
-        public required IReadOnlyList<Attribute> Attributes { get; set; }
+        public required virtual IReadOnlyList<Attribute> Attributes { get; set; }
     }
 }
 
