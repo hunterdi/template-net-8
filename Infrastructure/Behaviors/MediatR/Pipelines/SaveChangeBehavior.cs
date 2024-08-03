@@ -22,13 +22,9 @@ namespace Infrastructure.Behaviors.MediatR.Pipelines
         {
             if (IsNotCommand()) return await next();
 
-            _logger.LogInformation("TRANSACTION[START]");
-
-            var response = await _unitOfWork.TryExecuteAsync<TResponse>(next);
+            var response = await _unitOfWork.TryExecuteAsync<TResponse>(next, cancellationToken);
 
             _unitOfWork.Dispose();
-
-            _logger.LogInformation("TRANSACTION[COMPLETE]");
 
             return response;
         }

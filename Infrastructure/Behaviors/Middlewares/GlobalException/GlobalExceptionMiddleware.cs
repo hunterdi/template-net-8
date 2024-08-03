@@ -1,11 +1,10 @@
 ﻿using Infrastructure.Behaviors.Extensions;
-using Infrastructure.Behaviors.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Behaviors.Middlewares.GlobalException
 {
-    public sealed class GlobalExceptionMiddleware(RequestDelegate next, IUnitOfWork unitOfWork, ILogger<GlobalExceptionMiddleware> logger)
+    public sealed class GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExceptionMiddleware> logger)
     {
         private readonly ILogger _logger = logger;
         private readonly RequestDelegate _next = next;
@@ -19,8 +18,6 @@ namespace Infrastructure.Behaviors.Middlewares.GlobalException
             catch (Exception ex)
             {
                 await HandleExceptionAsync(context, ex);
-                await unitOfWork.RollbackAsync();
-                unitOfWork.Dispose();
             }
         }
 

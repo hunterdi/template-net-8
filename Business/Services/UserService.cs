@@ -37,7 +37,7 @@ namespace Business.Services
 
             await _userManager.CreateAsync(userMapped, command.Password.ApplyHash());
             var response = await _userManager.AddToRoleAsync(userMapped, role);
-
+            
             return response;
         }
 

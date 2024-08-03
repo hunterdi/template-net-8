@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
+using System.Transactions;
 
 namespace Infrastructure.Behaviors.Repositories
 {
@@ -20,26 +21,42 @@ namespace Infrastructure.Behaviors.Repositories
             _logger = logger;
         }
 
-        public async Task<T> TryExecuteAsync<T>(RequestHandlerDelegate<T> action) where T : notnull
+        public async Task<T> TryExecuteAsync<T>(RequestHandlerDelegate<T> action, CancellationToken cancellationToken = default)
         {
-            var _strategy = _dbContext.Database.CreateExecutionStrategy();
-
-            if (_strategy == null) throw new ArgumentException();
-
-            var result = await _strategy.ExecuteAsync<T>(async () =>
+            try
             {
-                await BeginTransactionAsync();
-                var actionResult = await action();
-                await SaveChangesAsync();
-                await CommitAsync();
-                return actionResult;
-            });
+                var _strategy = _dbContext.Database.CreateExecutionStrategy();
 
-            return result;
+                if (_strategy == null) throw new ArgumentException();
+
+                var result = await _strategy.ExecuteAsync<T>(async () =>
+                {
+                    await BeginTransactionAsync(cancellationToken);
+                    var actionResult = await action();
+                    await SaveChangesAsync(cancellationToken);
+                    await CommitAsync(cancellationToken);
+                    return actionResult;
+                });
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("TRANSACTION[ERROR]");
+
+                await RollbackAsync(cancellationToken);
+                throw new TransactionException(ex.Message);
+            }
+            finally
+            {
+                _logger.LogInformation("TRANSACTION[FINISHING]");
+            }
         }
 
         private async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
         {
+            _logger.LogInformation("TRANSACTION[STAR]");
+
             _transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken) ?? throw new ArgumentNullException();
         }
 
@@ -48,6 +65,8 @@ namespace Infrastructure.Behaviors.Repositories
             if (_transaction == null) throw new ArgumentNullException("CommitAsync");
 
             await _transaction.CommitAsync(cancellationToken);
+
+            _logger.LogInformation("TRANSACTION[COMMITED]");
         }
 
         private async Task SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -55,11 +74,13 @@ namespace Infrastructure.Behaviors.Repositories
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task RollbackAsync(CancellationToken cancellationToken = default)
+        private async Task RollbackAsync(CancellationToken cancellationToken = default)
         {
             if (_transaction == null) throw new ArgumentNullException("RollbackAsync");
 
             await _transaction.RollbackAsync(cancellationToken);
+
+            _logger.LogInformation("TRANSACTION[ROLLBACKED]");
         }
 
         public TRepository GetRepository<TRepository, TEntity, TKey>() where TRepository : BaseRepository<TEntity, TKey> where TEntity : BaseEntity<TKey> where TKey : IComparable
@@ -78,6 +99,7 @@ namespace Infrastructure.Behaviors.Repositories
                 }
             }
             this._disposed = true;
+            _logger.LogInformation("TRANSACTION[DISPOSED]");
         }
 
         public void Dispose()
