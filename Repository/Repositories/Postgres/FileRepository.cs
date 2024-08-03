@@ -1,11 +1,11 @@
-﻿using Core.Database;
-using Repository.Common.Behaviors;
+﻿using Infrastructure.Behaviors.Repositories;
+using Infrastructure.Database;
 
 namespace Repository.Repositories.Postgres
 {
-    public class FileRepository : BaseRepository<Domain.Entities.File, Guid>, IFileRepository
+    public class FileRepository : BaseRepository<Domain.Entities.File, long>, IFileRepository
     {
-        public FileRepository(ApplicationContextDB dbContext) : base(dbContext)
+        public FileRepository(PostgresDBContext dbContext) : base(dbContext)
         {
         }
     }

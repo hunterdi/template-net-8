@@ -1,12 +1,9 @@
 ﻿using MappingValidation.Models.Commands;
-using MappingValidation.Models.Common.Behaviors;
 using MappingValidation.Models.Queries;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
-using RPGApi.Resources;
-using Service.Common.Behaviors;
-using Service.Services;
+using Business.Services;
+using Domain.Behaviors;
 
 namespace RPGApi.Controllers
 {
@@ -18,21 +15,21 @@ namespace RPGApi.Controllers
 
         public FileController(IFileService service)
         {
-            this._service = service;
+            _service = service;
         }
 
         [HttpPost]
-        public async Task<ActionResult<FileViewModel?>> Create([FromForm] FileCreateViewModel file, CancellationToken cancellationToken)
+        public async Task<ActionResult<FileQuery?>> Create([FromForm] FileCreateCommand file, CancellationToken cancellationToken)
         {
-            var result = await this._service.CreateAsync<FileViewModel, FileCreateViewModel>(file, cancellationToken);
+            var result = await _service.CreateAsync<FileQuery, FileCreateCommand>(file, cancellationToken);
 
             return Ok(result);
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedResponseViewModel<FileViewModel, Guid>?>> Get([FromQuery] PagingRequestModelViewModel<FileFilterViewModel> pagingRequest, CancellationToken cancellationToken)
+        public async Task<ActionResult<PageQuery<FileQuery, long>?>> Get([FromQuery] PageCommand<FileFilterCommand> pagingRequest, CancellationToken cancellationToken)
         {
-            var result = await this._service.GetPagedAsync<FileViewModel, FileFilterViewModel>(pagingRequest, cancellationToken);
+            var result = await _service.GetPagedAsync<FileQuery, FileFilterCommand>(pagingRequest, cancellationToken);
 
             var metadata = new
             {
@@ -50,53 +47,35 @@ namespace RPGApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update([FromRoute] Guid id, [FromForm] FileUpdateViewModel dto, CancellationToken cancellationToken)
+        public async Task<ActionResult> Update([FromRoute] long id, [FromForm] FileUpdateCommand command, CancellationToken cancellationToken)
         {
-            await this._service.UpdateAsync(id, dto, cancellationToken);
+            await _service.UpdateAsync(id, command, cancellationToken);
 
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
+        public async Task<ActionResult> Delete([FromRoute] long id, CancellationToken cancellationToken)
         {
-            await this._service.RemoveAsync(id, cancellationToken);
+            await _service.RemoveAsync(id, cancellationToken);
 
             return Ok();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<FileViewModel>> ById([FromRoute] Guid id)
+        public async Task<ActionResult<FileQuery>> ById([FromRoute] long id)
         {
-            var result = await this._service.GetByIdAsync<FileViewModel>(id);
+            var result = await _service.GetByIdAsync<FileQuery>(id);
 
             return Ok(result);
         }
 
-        [HttpGet("async")]
-        public IAsyncEnumerable<int> GetAsync() => GetDataAsync();
-
-        private static async IAsyncEnumerable<int> GetDataAsync()
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                await Task.Delay(TimeSpan.FromSeconds(i));
-                yield return i;
-            }
-        }
-
         [HttpGet("download/{id}")]
-        public async Task<IActionResult> Download([FromRoute] Guid id)
+        public async Task<IActionResult> Download([FromRoute] long id)
         {
-            var result = await this._service.DownloadAsync(id);
+            var result = await _service.DownloadAsync(id);
 
             return File(result.Content, result.ContentType, result.RealName);
-        }
-
-        [HttpGet("message/{text}")]
-        public IActionResult Localizer([FromServices] IStringLocalizer<Global> localizer, [FromRoute] string text)
-        {
-            return Ok(localizer[text].Value);
         }
     }
 }

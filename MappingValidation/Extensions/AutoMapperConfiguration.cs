@@ -1,6 +1,4 @@
-﻿using MappingValidation.Models.Profiles;
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace MappingValidation.Extensions
 {

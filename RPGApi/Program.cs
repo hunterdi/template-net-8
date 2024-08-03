@@ -1,97 +1,49 @@
 using Autofac;
-using Autofac.Builder;
 using Autofac.Extensions.DependencyInjection;
-using Core.Common.Behaviors;
-using Core.Common.Extensions;
-using Core.Common.Providers;
-using Core.Database.Extensions;
-using Domain.Common;
-using MappingValidation.Extensions;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.Extensions.Localization;
-using System.Globalization;
+using Serilog;
+using Infrastructure.Behaviors.Extensions.Configurations;
 
-var builder = WebApplication.CreateBuilder(args);
-
-var serviceProvider = new AutofacServiceProviderFactory(providerOptions =>
+try
 {
-    providerOptions.RegisterAssemblyModules(AppDomain.CurrentDomain.GetAssemblies());
-});
+    var builder = WebApplication.CreateBuilder(args);
+    builder.AddSerilog(builder.Configuration, "RPG Application");
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.Limits.MaxRequestBodySize = 512 * 1024 * 1024;
-});
+    Log.Information("APP[EXECUTING]");
 
-builder.Host.UseServiceProviderFactory(serviceProvider)
-    .ConfigureServices(services =>
-{
-    services.Configure<ForwardedHeadersOptions>(options =>
+    var serviceProvider = new AutofacServiceProviderFactory(builderOptions =>
     {
-        options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-        options.KnownNetworks.Clear();
-        options.KnownProxies.Clear();
+        builderOptions.RegisterAssemblyModules(AppDomain.CurrentDomain.GetAssemblies());
     });
 
-    services.AddLocalization();
-    services.AddHttpContextAccessor();
-    services.Configure<Providers>(builder.Configuration.GetSection("Providers"));
-    services.AddProviders();
-
-    services.Configure<TenantSettings>(builder.Configuration.GetSection("Tenant"));
-    services.AddScoped<TenantService>();
-
-    services.AddDatabaseContext(builder);
-    services.AddLogging(builder =>
+    builder.WebHost.ConfigureKestrel(serverOptions =>
     {
-        builder.AddDebug();
-        builder.AddConsole();
+        serverOptions.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(2);
+        serverOptions.Limits.MaxRequestBodySize = 512 * 1024 * 1024;
     });
 
-    services.AddMappers();
-    services.AddMediatR(e => e.RegisterServicesFromAssemblyContaining<Program>());
-
-    services.AddStorage();
-
-    services.Configure<FormOptions>(options =>
+    builder.Host
+        .UseServiceProviderFactory(serviceProvider)
+        .ConfigureServices(services =>
     {
-        options.MultipartBodyLengthLimit = 512 * 1024 * 1024;
+        services.AddConfiguration(builder);
     });
 
-    services.AddControllers();
-    services.AddEndpointsApiExplorer();
-    services.AddSwaggerGen(c =>
+    var app = builder.Build();
+
+    using (var scope = app.Services.CreateScope())
     {
-        c.OperationFilter<TenantIdHeaderSwaggerAttribute>();
-    });
-});
+        var services = scope.ServiceProvider;
+        await app.AddConfiguration(Seed.Extensions.Seed.SeedDataAsync(services));
+    }
 
-var app = builder.Build();
-
-app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod());
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.Run();
 }
-
-app.UseHttpsRedirection();
-
-var supportedCultures = new[] { new CultureInfo("pt-BR"), new CultureInfo("en-US"), new CultureInfo("fr-FR") };
-
-var locationOptions = new RequestLocalizationOptions 
+catch (Exception ex) when (ex is not HostAbortedException && ex.Source != "Microsoft.EntityFrameworkCore.Design")
 {
-    DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(supportedCultures[0]),
-    SupportedCultures = supportedCultures.ToList(),
-    SupportedUICultures = supportedCultures.ToList(),
-};
-
-app.UseRequestLocalization(locationOptions);
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+    Log.Fatal(ex, "APP[EXCEPTION]");
+}
+finally
+{
+    Log.Information("APP[END]");
+    await Log.CloseAndFlushAsync();
+}

@@ -1,9 +1,9 @@
-﻿using Domain.Common;
+﻿using Domain.Behaviors;
 using Domain.Enums;
 
 namespace Domain.Entities
 {
-    public class File: BaseEntity<Guid>
+    public class File: BaseEntity<long>
     {
         public required string PersistedName { get; set; }
         public required string RealName { get; set; }
