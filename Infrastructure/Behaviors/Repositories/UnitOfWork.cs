@@ -42,20 +42,20 @@ namespace Infrastructure.Behaviors.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError("TRANSACTION[ERROR]");
+                _logger.LogError("TRANSACTION[UNITOFWORK][ERROR]");
 
                 await RollbackAsync(cancellationToken);
                 throw new TransactionException(ex.Message);
             }
             finally
             {
-                _logger.LogInformation("TRANSACTION[FINISHING]");
+                _logger.LogInformation("TRANSACTION[UNITOFWORK][FINISHING]");
             }
         }
 
         private async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
         {
-            _logger.LogInformation("TRANSACTION[STAR]");
+            _logger.LogInformation("TRANSACTION[UNITOFWORK][START]");
 
             _transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken) ?? throw new ArgumentNullException();
         }
@@ -66,7 +66,7 @@ namespace Infrastructure.Behaviors.Repositories
 
             await _transaction.CommitAsync(cancellationToken);
 
-            _logger.LogInformation("TRANSACTION[COMMITED]");
+            _logger.LogInformation("TRANSACTION[UNITOFWORK][COMMITED]");
         }
 
         private async Task SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -80,7 +80,7 @@ namespace Infrastructure.Behaviors.Repositories
 
             await _transaction.RollbackAsync(cancellationToken);
 
-            _logger.LogInformation("TRANSACTION[ROLLBACKED]");
+            _logger.LogInformation("TRANSACTION[UNITOFWORK][ROLLBACKED]");
         }
 
         public TRepository GetRepository<TRepository, TEntity, TKey>() where TRepository : BaseRepository<TEntity, TKey> where TEntity : BaseEntity<TKey> where TKey : IComparable
@@ -99,7 +99,7 @@ namespace Infrastructure.Behaviors.Repositories
                 }
             }
             this._disposed = true;
-            _logger.LogInformation("TRANSACTION[DISPOSED]");
+            _logger.LogInformation("TRANSACTION[UNITOFWORK][DISPOSED]");
         }
 
         public void Dispose()

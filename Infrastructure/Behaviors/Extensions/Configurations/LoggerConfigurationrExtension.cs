@@ -9,6 +9,7 @@ using Serilog.Filters;
 using Serilog.Formatting.Json;
 using Destructurama;
 using SerilogTracing;
+using Serilog.Events;
 
 namespace Infrastructure.Behaviors.Extensions.Configurations
 {
@@ -18,11 +19,15 @@ namespace Infrastructure.Behaviors.Extensions.Configurations
         {
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .Enrich.WithProperty("APP", $"{applicationName} - {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}")
                 .Enrich.FromLogContext()
                 .Filter.ByExcluding(Matching.FromSource("Microsoft.AspNetCore.StaticFiles"))
                 .Filter.ByExcluding(e => e.MessageTemplate.Text.Contains("specific error"))
-                .WriteTo.Console(new JsonFormatter(renderMessage: true), Serilog.Events.LogEventLevel.Debug)
+                .WriteTo.Console(new JsonFormatter(renderMessage: true), LogEventLevel.Debug)
                 //.WriteTo.Console(Formatters.CreateConsoleTextFormatter(TemplateTheme.Code))
                 //"[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception} HTTP {RequestMethod} {RequestPath} ({UserId}{id}) responded {StatusCode} in {Elapsed:0.0000}ms"
                 .Destructure.UsingAttributes()

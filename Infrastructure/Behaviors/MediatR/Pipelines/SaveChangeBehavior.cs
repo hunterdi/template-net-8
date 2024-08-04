@@ -24,8 +24,6 @@ namespace Infrastructure.Behaviors.MediatR.Pipelines
 
             var response = await _unitOfWork.TryExecuteAsync<TResponse>(next, cancellationToken);
 
-            _unitOfWork.Dispose();
-
             return response;
         }
 
