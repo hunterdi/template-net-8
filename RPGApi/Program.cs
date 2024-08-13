@@ -2,6 +2,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Serilog;
 using Infrastructure.Behaviors.Extensions.Configurations;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 try
 {
@@ -15,10 +16,19 @@ try
         builderOptions.RegisterAssemblyModules(AppDomain.CurrentDomain.GetAssemblies());
     });
 
-    builder.WebHost.ConfigureKestrel(serverOptions =>
+    builder.WebHost.ConfigureKestrel((_, options) =>
     {
-        serverOptions.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(2);
-        serverOptions.Limits.MaxRequestBodySize = 512 * 1024 * 1024;
+        options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(2);
+        options.Limits.MaxRequestBodySize = 512 * 1024 * 1024;
+
+        var portEnv = Environment.GetEnvironmentVariable("PORT");
+        var port = !string.IsNullOrEmpty(portEnv) ? int.Parse(portEnv) : 8080;
+
+        options.ListenAnyIP(port, listenOptions =>
+        {
+            listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
+            listenOptions.UseHttps();
+        });
     });
 
     builder.Host

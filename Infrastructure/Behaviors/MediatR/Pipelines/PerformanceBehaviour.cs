@@ -21,7 +21,7 @@ namespace Infrastructure.Behaviors.MediatR.Pipelines
 
             var elapsedMilliseconds = timer.ElapsedMilliseconds;
 
-            _logger.LogInformation($"REQUEST[END_TIME]:{elapsedMilliseconds}");
+            _logger.LogInformation($"REQUEST[PERFORMANCE_BEHAVIOUR][END_TIME]:{elapsedMilliseconds}");
 
             return response;
         }

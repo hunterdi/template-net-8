@@ -2,14 +2,12 @@
 using Business.Handlers;
 using Business.Services;
 using MappingValidation.Models.Commands;
-using MappingValidation.Models.Messages;
-using MappingValidation.Models.Notifications;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace Business
 {
-    public sealed class ServiceModule: Module
+    public sealed class ServiceModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -19,7 +17,6 @@ namespace Business
             builder.RegisterType<JwtService>().As<IJwtService>().InstancePerLifetimeScope().PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
 
             builder.RegisterType<CreateUserHandler>().As<IRequestHandler<UserCreateCommand, IdentityResult>>().InstancePerLifetimeScope().PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
-            builder.RegisterType<CreateUserNotify>().As<INotificationHandler<CreatedUserMessage>>().SingleInstance().PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
 
             base.Load(builder);
         }
