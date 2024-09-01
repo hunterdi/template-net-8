@@ -75,6 +75,11 @@ namespace Infrastructure.Migrations.Postgres
                     b.Property<DateTimeOffset>("UpdatedOn")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.ToTable("Files");
@@ -121,6 +126,11 @@ namespace Infrastructure.Migrations.Postgres
 
                     b.Property<DateTimeOffset>("UpdatedOn")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -198,6 +208,11 @@ namespace Infrastructure.Migrations.Postgres
 
                     b.Property<DateTimeOffset>("UpdatedOn")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 

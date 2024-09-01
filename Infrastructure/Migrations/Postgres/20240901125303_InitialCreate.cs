@@ -71,7 +71,8 @@ namespace Infrastructure.Migrations.Postgres
                     UpdatedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     IsVisible = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    DeletedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                    DeletedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    Version = table.Column<Guid>(type: "uuid", rowVersion: true, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -198,7 +199,8 @@ namespace Infrastructure.Migrations.Postgres
                     UpdatedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     IsVisible = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    DeletedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                    DeletedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    Version = table.Column<Guid>(type: "uuid", rowVersion: true, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -225,7 +227,8 @@ namespace Infrastructure.Migrations.Postgres
                     UpdatedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     IsVisible = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    DeletedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                    DeletedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    Version = table.Column<Guid>(type: "uuid", rowVersion: true, nullable: false)
                 },
                 constraints: table =>
                 {

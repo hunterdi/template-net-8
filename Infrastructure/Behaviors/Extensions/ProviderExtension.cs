@@ -6,7 +6,7 @@ namespace Infrastructure.Behaviors.Extensions
 {
     public static class ProviderExtension
     {
-        public static IServiceCollection AddProviders(this IServiceCollection services)
+        public static IServiceCollection AddProvidersConfiguration(this IServiceCollection services)
         {
             services.AddHttpClient<IpClientService>()
         .AddPolicyHandler(

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System.Linq.Expressions;
 
-namespace Repository.Repositories.Postgres
+namespace Repository.Postgres
 {
     public interface IRoleRepository
     {

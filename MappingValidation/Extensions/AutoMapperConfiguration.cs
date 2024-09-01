@@ -4,7 +4,7 @@ namespace MappingValidation.Extensions
 {
     public static class AutoMapperConfiguration
     {
-        public static IServiceCollection AddMappers(this IServiceCollection services)
+        public static IServiceCollection AddMappersConfiguration(this IServiceCollection services)
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

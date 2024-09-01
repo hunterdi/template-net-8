@@ -9,6 +9,7 @@
         public required bool IsVisible { get; set; }
         public required bool IsDeleted { get; set; }
         public DateTimeOffset? DeletedOn { get; set; }
+        public required Guid Version { get; set; }
 
         public void Created()
         {

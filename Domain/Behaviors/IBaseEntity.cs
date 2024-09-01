@@ -8,6 +8,7 @@
         DateTimeOffset? DeletedOn { get; set; }
         bool IsVisible { get; set; }
         bool IsActive { get; set; }
+        Guid Version { get; set; }
 
         void Created();
         void UndoDelete();

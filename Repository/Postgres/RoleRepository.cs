@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace Repository.Repositories.Postgres
+namespace Repository.Postgres
 {
-    public class RoleRepository: IRoleRepository
+    public class RoleRepository : IRoleRepository
     {
         protected readonly PostgresDBContext _dbContext;
 

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations.Postgres
 {
     [DbContext(typeof(PostgresDBContext))]
-    [Migration("20240729174714_InitialCreate")]
+    [Migration("20240901125303_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -78,6 +78,11 @@ namespace Infrastructure.Migrations.Postgres
                     b.Property<DateTimeOffset>("UpdatedOn")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.ToTable("Files");
@@ -124,6 +129,11 @@ namespace Infrastructure.Migrations.Postgres
 
                     b.Property<DateTimeOffset>("UpdatedOn")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -201,6 +211,11 @@ namespace Infrastructure.Migrations.Postgres
 
                     b.Property<DateTimeOffset>("UpdatedOn")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 

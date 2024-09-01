@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using Infrastructure.Behaviors.Repositories;
-using Repository.Repositories.Postgres;
+using Repository.Postgres;
 
 namespace Repository
 {

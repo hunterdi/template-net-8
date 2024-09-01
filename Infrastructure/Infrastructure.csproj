@@ -12,6 +12,7 @@
 		<PackageReference Include="Destructurama.Attributed" Version="4.0.0" />
 		<PackageReference Include="Destructurama.JsonNet" Version="3.0.0" />
 		<PackageReference Include="EFCore.BulkExtensions" Version="8.1.0" />
+		<PackageReference Include="MassTransit.RabbitMQ" Version="8.2.5" />
 		<PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="12.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.7" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.7" />
@@ -40,6 +41,7 @@
 		<PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
 		<PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
+		<PackageReference Include="Serilog.Sinks.Grafana.Loki" Version="8.3.0" />
 		<PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
 		<PackageReference Include="SerilogTracing" Version="2.1.0" />
 		<PackageReference Include="SerilogTracing.Sinks.OpenTelemetry" Version="2.1.0" />

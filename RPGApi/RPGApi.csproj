@@ -10,17 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="data\**" />
-    <Compile Remove="Migrations\**" />
-    <Content Remove="data\**" />
-    <Content Remove="Migrations\**" />
-    <EmbeddedResource Remove="data\**" />
-    <EmbeddedResource Remove="Migrations\**" />
-    <None Remove="data\**" />
-    <None Remove="Migrations\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Autofac" Version="8.0.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="MediatR" Version="12.4.0" />
@@ -43,6 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Deploy\Data\kafka-connect\" />
+    <Folder Include="Deploy\Data\rabbitmq\" />
     <Folder Include="Upload\Files\" />
   </ItemGroup>
 
@@ -62,6 +53,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Global.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="..\.dockerignore" Link="Deploy\.dockerignore" />
   </ItemGroup>
 
 </Project>

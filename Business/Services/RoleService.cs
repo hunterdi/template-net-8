@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
-using Repository.Repositories.Postgres;
+using Repository.Postgres;
 using System.Security.Claims;
 
 namespace Business.Services

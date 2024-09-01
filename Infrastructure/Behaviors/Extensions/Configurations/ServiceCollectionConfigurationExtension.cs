@@ -24,14 +24,14 @@ namespace Infrastructure.Behaviors.Extensions.Configurations
             });
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
-            services.AddOptions(builder);
+            services.AddOptionsConfiguration(builder);
             services.AddLocalization();
             services.AddHttpContextAccessor();
-            services.AddProviders();
+            services.AddProvidersConfiguration();
             services.AddScoped<TenantService>();
             services.AddAuthenticationConfiguration();
-            services.AddDatabaseContext(builder);
-            services.AddMappers();
+            services.AddDatabaseContextConfiguration(builder);
+            services.AddMappersConfiguration();
             services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddMediatR(e =>
@@ -43,10 +43,11 @@ namespace Infrastructure.Behaviors.Extensions.Configurations
                 e.AddOpenBehavior(typeof(SaveChangeBehavior<,>));
             });
 
-            services.AddStorage();
+            services.AddStorageConfiguration();
             services.Configure<FormOptions>(options =>
             {
                 options.MultipartBodyLengthLimit = 512 * 1024 * 1024;
+                options.BufferBodyLengthLimit = 512 * 1024 * 1024;
             });
             services.AddControllers();
             services.AddEndpointsApiExplorer();

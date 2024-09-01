@@ -10,7 +10,7 @@ namespace Infrastructure.Database.Extensions
 {
     public static class ContextDBExtension
     {
-        public static IServiceCollection AddDatabaseContext(this IServiceCollection services, WebApplicationBuilder builder)
+        public static IServiceCollection AddDatabaseContextConfiguration(this IServiceCollection services, WebApplicationBuilder builder)
         {
             var tenantService = services.GetService<TenantService>();
 

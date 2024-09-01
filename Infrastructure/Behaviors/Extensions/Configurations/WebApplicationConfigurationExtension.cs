@@ -17,10 +17,7 @@ namespace Infrastructure.Behaviors.Extensions.Configurations
 
             app.UseSerilogRequestLogging(opts => opts.EnrichDiagnosticContext = LoggerConfigurationrExtension.EnrichFromRequest);
 
-            app.UseExceptionHandler(_ => { });
-            app.UseMiddleware<RequestAuditMiddleware>();
-            app.UseMiddleware<GlobalExceptionMiddleware>();
-            app.UseMiddleware<OperationCanceledMiddleware>();
+            app.UseMiddlewarePipeline();
 
             await runSeed;
 
@@ -29,6 +26,29 @@ namespace Infrastructure.Behaviors.Extensions.Configurations
             app.UseSwaggerUI();
             app.UseHttpsRedirection();
 
+            app.UseLocaltionConfiguration();
+            app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.MapControllers();
+
+            return app;
+        }
+
+        private static IApplicationBuilder UseMiddlewarePipeline(this IApplicationBuilder app)
+        {
+            app.UseExceptionHandler(_ => { });
+            app.UseMiddleware<RequestAuditMiddleware>();
+            app.UseMiddleware<GlobalExceptionMiddleware>();
+            app.UseMiddleware<OperationCanceledMiddleware>();
+
+            return app;
+        }
+
+        private static IApplicationBuilder UseLocaltionConfiguration(this IApplicationBuilder app)
+        {
             var supportedCultures = new[] { new CultureInfo("pt-BR"), new CultureInfo("en-US"), new CultureInfo("fr-FR") };
             var locationOptions = new RequestLocalizationOptions
             {
@@ -37,12 +57,6 @@ namespace Infrastructure.Behaviors.Extensions.Configurations
                 SupportedUICultures = supportedCultures.ToList(),
             };
             app.UseRequestLocalization(locationOptions);
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.MapControllers();
 
             return app;
         }

@@ -10,7 +10,7 @@ public class Program
         HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
         builder.Environment.ContentRootPath = Directory.GetCurrentDirectory();
         builder.Configuration.AddJsonFile("hostsettings.json", optional: true);
-        builder.Configuration.AddEnvironmentVariables(prefix: "PREFIX_");
+        builder.Configuration.AddEnvironmentVariables();
 
         builder.Services.AddHostedService<Worker>();
 

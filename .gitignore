@@ -425,7 +425,10 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode,dotnetcore
-/RPGApi/data/PostgreSQL
-/RPGApi/data/Storage
-/RPGApi/Upload/Files/861dcf68-c10f-4fc2-986e-9a443148358f-Informe de Rendimentos 2023 Jacileide Rodrigues Vieira da Silva.pdf
-/RPGApi/data
+/RPGApi/Deploy/Data/connect*
+/RPGApi/Deploy/Data/postgreSQL
+/RPGApi/Deploy/Data/storage
+/RPGApi/Deploy/Data/rabbitmq*
+/RPGApi/Deploy/Data/elasticsearch/elasticsearch-data
+/RPGApi/Deploy/Data/grafana/grafana.db
+/RPGApi/Upload

@@ -7,7 +7,7 @@ namespace Infrastructure.Behaviors.Extensions
 {
     public static class AzureStorageExtension
     {
-        public static IServiceCollection AddStorage(this IServiceCollection services)
+        public static IServiceCollection AddStorageConfiguration(this IServiceCollection services)
         {
             //var serviceProvider = services.BuildServiceProvider();
             //var tenantProvider = serviceProvider.GetRequiredService<TenantService>();
